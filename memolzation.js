@@ -17,7 +17,7 @@ const generateKey = args => args.map(strKey).join(',');
 //     }
 // }
 
-const memolzation = func => {
+const memolzation = (func, length) => {
     const cache = new Map();
 
     return (...args) => {
@@ -25,6 +25,12 @@ const memolzation = func => {
 
         if (cache.has(key)) return cache.get(key);
         const result = func(...args);
+        if ( cache.size >= length) {
+            const firstKey = cache.keys().next().value;
+            console.log(cache.keys().next().value);
+            console.log('Удаляем:' + firstKey);
+            cache.delete(firstKey);
+        }
         cache.set(key, result);
         return result;
     }
@@ -38,11 +44,21 @@ const foo = (a, b) => {
     return res;
 };
 
-const memFoo = memolzation(foo);
+const memFoo = memolzation(foo, 4);
 
-// console.log(memFoo(1,10000000000));
-// console.log(memFoo(1,10000000001));
-// console.log(memFoo(1,10000000000));
-// console.log(memFoo(1,10000000001));
+console.log('0', memFoo(1,1000000000));
+console.log('1', memFoo(1,1000000001));
+console.log('2', memFoo(1,1000000002));
+console.log('3', memFoo(1,1000000003));
+console.log('4', memFoo(1,1000000004));
+console.log('5', memFoo(1,1000000005));
+console.log('0', memFoo(1,1000000000));
+console.log('1', memFoo(1,1000000001));
+console.log('2', memFoo(1,1000000002));
+console.log('3', memFoo(1,1000000003));
+console.log('4', memFoo(1,1000000004));
+console.log('5', memFoo(1,1000000005));
+
+
   
   
