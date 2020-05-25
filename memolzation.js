@@ -4,16 +4,28 @@ const strKey = item => item.toString() + '(' + typeof item + ')';
 const generateKey = args => args.map(strKey).join(',');
 
 
-const memolzation = func => {
-    const cache = {};
+// const memolzation = func => {
+//     const cache = {};
    
+//     return (...args) => {
+//         const key = generateKey(args); 
+//         const val = cache[key];
+//         if (val) return val;
+//         const result = func(...args); 
+//         cache[key] = result;
+//         return result;
+//     }
+// }
+
+const memolzation = func => {
+    const cache = new Map();
+
     return (...args) => {
-        const key = generateKey(args); 
-        const val = cache[key];
-        console.log(val);
-        if (val) return val;
-        const result = func(...args); 
-        cache[key] = result;
+        const key = generateKey(args);
+
+        if (cache.has(key)) return cache.get(key);
+        const result = func(...args);
+        cache.set(key, result);
         return result;
     }
 }
